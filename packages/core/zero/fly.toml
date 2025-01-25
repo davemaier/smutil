@@ -1,0 +1,215 @@
+app = "smutil-cache"
+primary_region = 'lax'
+
+[build]
+image = "registry.hub.docker.com/rocicorp/zero:latest"
+
+[http_service]
+internal_port = 4848
+force_https = true
+auto_stop_machines = 'off'
+min_machines_running = 1
+
+[[http_service.checks]]
+grace_period = "10s"
+interval = "10s"
+method = "GET"
+timeout = "5s"
+path = "/"
+
+[[vm]]
+memory = '2gb'
+cpu_kind = 'shared'
+cpus = 2
+
+[mounts]
+source = "sqlite_db"
+destination = "/data"
+
+[env]
+ZERO_REPLICA_FILE = "/data/sync-replica.db"
+ZERO_UPSTREAM_DB="postgresql://smutil_owner:uJiSVW6Ragw5@ep-divine-truth-a2b15szg.eu-central-1.aws.neon.tech:5432/smutil?sslmode=require"
+ZERO_CVR_DB="postgresql://smutil_owner:uJiSVW6Ragw5@ep-divine-truth-a2b15szg.eu-central-1.aws.neon.tech:5432/smutil_cvr?sslmode=require"
+ZERO_CHANGE_DB="postgresql://smutil_owner:uJiSVW6Ragw5@ep-divine-truth-a2b15szg.eu-central-1.aws.neon.tech:5432/smutil_cdb?sslmode=require"
+ZERO_AUTH_JWKS_URL="https://24538516-c2cc-467a-8f6c-1c6ce7f2d273.hanko.io/.well-known/jwks.json"
+ZERO_AUTO_RESET="true"
+LOG_LEVEL = "debug"
+ZERO_SCHEMA_JSON = """{
+  "permissions": {
+    "users": {
+      "row": {
+        "insert": [],
+        "update": {
+          "preMutation": []
+        },
+        "delete": []
+      }
+    }
+  },
+  "schema": {
+    "version": 1,
+    "tables": {
+      "domains": {
+        "tableName": "domains",
+        "primaryKey": [
+          "id"
+        ],
+        "columns": {
+          "createdAt": {
+            "type": "string",
+            "optional": false
+          },
+          "createdByUserId": {
+            "type": "string",
+            "optional": false
+          },
+          "id": {
+            "type": "string",
+            "optional": false
+          },
+          "name": {
+            "type": "string",
+            "optional": false
+          },
+          "paymentStatus": {
+            "type": "string",
+            "optional": false
+          },
+          "plan": {
+            "type": "string",
+            "optional": false
+          },
+          "teamId": {
+            "type": "string",
+            "optional": false
+          },
+          "userId": {
+            "type": "string",
+            "optional": false
+          }
+        },
+        "relationships": {
+          "users": {
+            "sourceField": [
+              "userId"
+            ],
+            "destField": [
+              "id"
+            ],
+            "destSchema": "users"
+          }
+        }
+      },
+      "hookDomains": {
+        "tableName": "hookDomains",
+        "primaryKey": [
+          "id"
+        ],
+        "columns": {
+          "createdAt": {
+            "type": "string",
+            "optional": false
+          },
+          "domainId": {
+            "type": "string",
+            "optional": false
+          },
+          "hookId": {
+            "type": "string",
+            "optional": false
+          },
+          "id": {
+            "type": "string",
+            "optional": false
+          },
+          "totalRequests": {
+            "type": "number",
+            "optional": false
+          }
+        },
+        "relationships": {}
+      },
+      "hooks": {
+        "tableName": "hooks",
+        "primaryKey": [
+          "id"
+        ],
+        "columns": {
+          "createdAt": {
+            "type": "string",
+            "optional": false
+          },
+          "domainId": {
+            "type": "string",
+            "optional": false
+          },
+          "id": {
+            "type": "string",
+            "optional": false
+          },
+          "name": {
+            "type": "string",
+            "optional": false
+          }
+        },
+        "relationships": {
+          "hookDomains": {
+            "sourceField": [
+              "id"
+            ],
+            "destField": [
+              "hookId"
+            ],
+            "destSchema": "hookDomains"
+          }
+        }
+      },
+      "teams": {
+        "tableName": "teams",
+        "primaryKey": [
+          "id"
+        ],
+        "columns": {
+          "createdAt": {
+            "type": "string",
+            "optional": false
+          },
+          "id": {
+            "type": "string",
+            "optional": false
+          },
+          "name": {
+            "type": "string",
+            "optional": false
+          }
+        },
+        "relationships": {}
+      },
+      "users": {
+        "tableName": "users",
+        "primaryKey": [
+          "id"
+        ],
+        "columns": {
+          "email": {
+            "type": "string",
+            "optional": false
+          },
+          "id": {
+            "type": "string",
+            "optional": false
+          },
+          "name": {
+            "type": "string",
+            "optional": false
+          },
+          "teamId": {
+            "type": "string",
+            "optional": false
+          }
+        },
+        "relationships": {}
+      }
+    }
+  }
+}"""

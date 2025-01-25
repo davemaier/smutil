@@ -1,0 +1,25 @@
+{
+  "name": "@smutil/core",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "start": "bun run index.ts",
+    "dbpush": "bunx drizzle-kit push",
+    "dev": "bun --watch run index.ts"
+  },
+  "devDependencies": {
+    "@flydotio/dockerfile": "^0.5.8",
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@elysiajs/cors": "1.1.1",
+    "@paralleldrive/cuid2": "^2.2.2",
+    "elysia": "1.1.13",
+    "event-iterator": "^2.0.0",
+    "image-size": "^1.1.1",
+    "openai": "^4.56.0"
+  }
+}

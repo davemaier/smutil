@@ -1,0 +1,3 @@
+CREATE DATABASE smutil;
+CREATE DATABASE smutil_cvr;
+CREATE DATABASE smutil_cdb;
