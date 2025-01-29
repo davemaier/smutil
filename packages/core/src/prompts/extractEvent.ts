@@ -1,4 +1,4 @@
-export const extractEvent = {
+export const EXTRACT_EVENT = {
   message: `I give you event details and you return structured json and nothing else, no explanation, no markdown. You return the json in the language of the majority of the input. You suppose that I\'m living in graz. The current datetime is 26.06.2024 8:48am. If no info suppose an event takes 1h. If not time info use tomorrow 9am.
     You never return data from the example response. If you can't infer information return the missing fields as null and don't hallucinate.
 

@@ -11,22 +11,19 @@ interface ApiResponse {
   end_time: string;
 }
 
-const url = new URL(
-  "/api/stream/extract-event",
-  import.meta.env.VITE_API_BASE_URL,
-);
+const url = new URL("/stream/extract-event", process.env.API_BASE_URL);
 
 export function useExtractEvent() {
   const { data, loading, error, fetchStream } = useFetchStream<ApiResponse>(
     url,
-    "application/json",
+    "application/json"
   );
 
   const extract = useCallback(
     (text: string) => {
       fetchStream(JSON.stringify({ text }));
     },
-    [fetchStream],
+    [fetchStream]
   );
 
   return { data, loading, error, extract };

@@ -1,8 +1,8 @@
-import { defineConfig, mergeConfig } from "vite";
 import { tanstackViteConfig } from "@tanstack/config/vite";
 import react from "@vitejs/plugin-react-swc";
+import { defineConfig, mergeConfig } from "vite";
 
-// https://vitejs.dev/config/
+// https://vite.dev/config/
 const config = defineConfig({
   plugins: [react()],
 });
@@ -12,11 +12,5 @@ export default mergeConfig(
   tanstackViteConfig({
     entry: "./src/index.ts",
     srcDir: "./src",
-  }),
-  // {
-  //   build: {
-  //     minify: "terser",
-  //     rollupOptions: { output: { preserveModules: false } },
-  //   },
-  // },
+  })
 );

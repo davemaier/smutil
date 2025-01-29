@@ -1,7 +1,8 @@
 {
   "name": "smutil",
   "scripts": {
-    "dev": "bun run --filter='*' dev"
+    "dev": "bun run --filter='*' dev",
+    "dev:backend": "bun run --filter='{server,@smutil/core}' dev"
   },
   "workspaces": [
     "packages/*"

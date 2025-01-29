@@ -7,10 +7,7 @@ interface ApiResponse {
   alt_tag: string;
 }
 
-const url = new URL(
-  "/api/stream/classify-image",
-  import.meta.env.VITE_API_BASE_URL,
-);
+const url = new URL("/stream/classify-image", process.env.API_BASE_URL);
 
 export function useClassifyImage() {
   const { data, loading, error, fetchStream } =
@@ -29,7 +26,7 @@ export function useClassifyImage() {
 
       fetchStream(data);
     },
-    [fetchStream],
+    [fetchStream]
   );
 
   return { uploadImage, data, loading, error };

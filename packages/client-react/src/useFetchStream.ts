@@ -1,5 +1,5 @@
-import { useState, useCallback } from "react";
-import { parse } from "./utils/partialParse";
+import { useCallback, useState } from "react";
+import { parse } from "./utils/partialParseOld";
 
 interface ReadableStreamReadResult<T> {
   done: boolean;
@@ -9,7 +9,7 @@ interface ReadableStreamReadResult<T> {
 const useFetchStream = <T>(url: URL, contentType?: string) => {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<Error | null>(null);
+  const [error] = useState<Error | null>(null);
 
   const fetchStream = useCallback(
     (body: BodyInit) => {
@@ -58,7 +58,7 @@ const useFetchStream = <T>(url: URL, contentType?: string) => {
         })
         .finally(() => setLoading(false));
     },
-    [url, contentType],
+    [url, contentType]
   );
 
   return { data, loading, error, fetchStream };

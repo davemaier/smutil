@@ -4,7 +4,7 @@ const cache = new Map<number | bigint, string>();
 
 export async function getOrCreateStream(
   cacheKey: number | bigint,
-  streamCreator: StreamCreator,
+  streamCreator: StreamCreator
 ): Promise<ReadableStream<Uint8Array> | string> {
   if (cache.has(cacheKey)) {
     // Cache hit: return cached content as string
@@ -19,13 +19,17 @@ export async function getOrCreateStream(
   const transformStream = new TransformStream<Uint8Array, Uint8Array>({
     transform(chunk, controller) {
       const chunkString = new TextDecoder().decode(chunk);
-      const chunkContent =
-        JSON.parse(chunkString).choices[0].delta.content || "";
-      fullContent += chunkContent;
-      controller.enqueue(chunkContent);
+      const lines = chunkString.split("\n");
+      const chunkContent = lines
+        .filter((line) => line.startsWith("data:"))
+        .filter((line) => !line.startsWith("data: [DONE]"))
+        .map((line) => JSON.parse(line.split("data:")[1]))
+        .map((data) => data.choices[0].delta.content);
+      chunkContent.forEach((content) => controller.enqueue(content));
+      chunkContent.forEach((content) => (fullContent += content));
     },
     flush() {
-      cache.set(cacheKey, fullContent);
+      //cache.set(cacheKey, fullContent);
     },
   });
 

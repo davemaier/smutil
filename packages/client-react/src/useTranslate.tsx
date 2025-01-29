@@ -6,19 +6,19 @@ interface ApiResponse {
   text: string;
 }
 
-const url = new URL("/api/stream/translate", import.meta.env.VITE_API_BASE_URL);
+const url = new URL("/stream/translate", process.env.API_BASE_URL);
 
 export function useTranslate() {
   const { data, loading, error, fetchStream } = useFetchStream<ApiResponse>(
     url,
-    "application/json",
+    "application/json"
   );
 
   const translate = useCallback(
     (text: string, language: string) => {
       fetchStream(JSON.stringify({ text, targetLanguage: language }));
     },
-    [fetchStream],
+    [fetchStream]
   );
 
   return { data, loading, error, translate };

@@ -13,15 +13,12 @@ interface ApiResponse {
   birthday: string;
 }
 
-const url = new URL(
-  "/api/stream/extract-address",
-  import.meta.env.VITE_API_BASE_URL,
-);
+const url = new URL("/stream/extract-address", process.env.API_BASE_URL);
 
 export function useExtractAddress() {
   const { data, loading, error, fetchStream } = useFetchStream<ApiResponse>(
     url,
-    "application/json",
+    "application/json"
   );
 
   useEffect(() => console.log("loading ", loading), [loading]);
@@ -30,7 +27,7 @@ export function useExtractAddress() {
     (text: string) => {
       fetchStream(JSON.stringify({ text }));
     },
-    [fetchStream],
+    [fetchStream]
   );
 
   return { data, loading, error, extract };

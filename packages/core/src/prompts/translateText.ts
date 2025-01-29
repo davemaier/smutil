@@ -2,7 +2,7 @@ type GetMessageParams = {
   language: string;
 };
 
-export const translateText = {
+export const TRANSLATE_TEXT = {
   getMessage: ({
     language,
   }: GetMessageParams) => `You are a professional translator.
