@@ -1,12 +1,11 @@
-import { useCallback } from "react";
 import useFetchStream from "./createFetchStream";
 
-interface ApiResponse {
+interface ApiResponse extends Record<string, unknown> {
   language: string;
   text: string;
 }
 
-const url = new URL("/api/stream/translate", import.meta.env.VITE_API_BASE_URL);
+const url = new URL("/stream/translate", process.env.API_BASE_URL);
 
 export function useTranslate() {
   const { data, loading, error, fetchStream } = useFetchStream<ApiResponse>(
@@ -14,12 +13,9 @@ export function useTranslate() {
     "application/json"
   );
 
-  const translate = useCallback(
-    (text: string, language: string) => {
-      fetchStream(JSON.stringify({ text, targetLanguage: language }));
-    },
-    [fetchStream]
-  );
+  const translate = (text: string, language: string) => {
+    fetchStream(JSON.stringify({ text, targetLanguage: language }));
+  };
 
   return { data, loading, error, translate };
 }

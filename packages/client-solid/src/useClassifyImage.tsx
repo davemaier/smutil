@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import useFetchStream from "./createFetchStream";
 import { readAndCompressImage } from "./utils/resizeImage";
 
-interface ApiResponse {
+interface ApiResponse extends Record<string, unknown> {
   explicit: boolean;
   alt_tag: string;
 }

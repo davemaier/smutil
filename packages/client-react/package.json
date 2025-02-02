@@ -17,13 +17,11 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "dev": "vite",
     "build": "rm -r dist && tsup --env.API_BASE_URL http://localhost:3000",
     "build:prd": "rm -r dist && tsup --env.API_BASE_URL https://smutil.dev",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "lint": "eslint ."
   },
-  "dependencies": {
+  "peerDependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

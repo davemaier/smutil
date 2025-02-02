@@ -29,5 +29,6 @@ export function useExtractStructured<S extends JSONSchema>(
     [fetchStream, schema]
   );
 
+  // eslint-disable-next-line
   return { data: data as any, loading, error, extract };
 }

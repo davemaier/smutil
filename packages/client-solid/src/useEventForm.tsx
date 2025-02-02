@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import useFetchStream from "./createFetchStream";
 
 // Define the structure of your API response
-interface ApiResponse {
+interface ApiResponse extends Record<string, unknown> {
   event: string;
   participants: string[];
   location: string;
@@ -11,10 +11,7 @@ interface ApiResponse {
   end_time: string;
 }
 
-const url = new URL(
-  "/api/stream/extract-event",
-  import.meta.env.VITE_API_BASE_URL
-);
+const url = new URL("/stream/extract-event", process.env.API_BASE_URL);
 
 export function useExtractEvent() {
   const { data, loading, error, fetchStream } = useFetchStream<ApiResponse>(

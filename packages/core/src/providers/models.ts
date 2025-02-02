@@ -11,6 +11,10 @@ export const models = {
     providers: ["OpenAI"],
     model: "openai/gpt-4o-mini",
   },
+  MISTRAL_SMALL_3: {
+    providers: ["Mistral", "DeepInfra"],
+    model: "mistralai/mistral-small-24b-instruct-2501",
+  },
 };
 
 export interface ModelSpecifier {

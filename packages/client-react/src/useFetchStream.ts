@@ -1,67 +1,40 @@
-import { useCallback, useState } from "react";
-import { parse } from "./utils/partialParseOld";
+import { createSignal } from "solid-js";
+import { parse } from "./utils/partialParse";
 
-interface ReadableStreamReadResult<T> {
-  done: boolean;
-  value: T | undefined;
-}
+function useFetchStream<T>(url: URL, contentType?: string) {
+  const [data, setData] = createSignal<T | null>(null);
+  const [loading, setLoading] = createSignal(false);
+  const [error, setError] = createSignal<Error | null>(null);
 
-const useFetchStream = <T>(url: URL, contentType?: string) => {
-  const [data, setData] = useState<T | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error] = useState<Error | null>(null);
-
-  const fetchStream = useCallback(
-    (body: BodyInit) => {
-      setLoading(true);
-      fetch(url, {
+  const fetchStream = async (body: BodyInit) => {
+    setLoading(true);
+    try {
+      const response = await fetch(url, {
         method: "POST",
-        ...(contentType ? { headers: { "Content-Type": contentType } } : {}),
+        headers: contentType ? { "Content-Type": contentType } : undefined,
         body,
-      })
-        .then((response) => {
-          if (!response.body) {
-            throw new Error("ReadableStream not supported in this environment");
-          }
+      });
 
-          const reader = response.body.getReader();
-          const decoder = new TextDecoder();
-          let result = "";
+      if (!response.body) throw new Error("ReadableStream not supported");
 
-          // Function to process the stream
-          function processStream({
-            done,
-            value,
-          }: ReadableStreamReadResult<Uint8Array>): Promise<void> {
-            if (done) {
-              return Promise.resolve();
-            }
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let result = "";
 
-            if (value) {
-              // Decode the chunk of data
-              result += decoder.decode(value, { stream: true });
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        result += decoder.decode(value, { stream: true });
+        setData(parse(result));
+      }
+    } catch (e) {
+      setError(e as Error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-              // Process the chunk (for example, log it)
-              setData(parse(result));
-            }
-
-            // Read the next chunk
-            // eslint-disable-next-line
-            // @ts-ignore
-            return reader.read().then(processStream);
-          }
-
-          // Start reading the stream
-          // eslint-disable-next-line
-          // @ts-ignore
-          return reader.read().then(processStream);
-        })
-        .finally(() => setLoading(false));
-    },
-    [url, contentType]
-  );
-
-  return { data, loading, error, fetchStream };
-};
+  return { data, setData, loading, error, fetchStream };
+}
 
 export default useFetchStream;

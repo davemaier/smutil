@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from "react";
 import useFetchStream from "./createFetchStream";
 
-interface ApiResponse {
+interface ApiResponse extends Record<string, unknown> {
   firstname: string;
   lastname: string;
   occupation: string;
@@ -13,10 +13,7 @@ interface ApiResponse {
   birthday: string;
 }
 
-const url = new URL(
-  "/api/stream/extract-address",
-  import.meta.env.VITE_API_BASE_URL
-);
+const url = new URL("/stream/extract-address", process.env.API_BASE_URL);
 
 export function useExtractAddress() {
   const { data, loading, error, fetchStream } = useFetchStream<ApiResponse>(

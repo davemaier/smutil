@@ -1,7 +1,6 @@
 import { useCallback } from "react";
 import useFetchStream from "./useFetchStream";
 
-// Define the structure of your API response
 interface ApiResponse {
   event: string;
   participants: string[];

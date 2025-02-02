@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import useFetchStream from "./useFetchStream";
 
 interface ApiResponse {
@@ -16,12 +16,8 @@ interface ApiResponse {
 const url = new URL("/stream/extract-address", process.env.API_BASE_URL);
 
 export function useExtractAddress() {
-  const { data, loading, error, fetchStream } = useFetchStream<ApiResponse>(
-    url,
-    "application/json"
-  );
-
-  useEffect(() => console.log("loading ", loading), [loading]);
+  const { data, setData, loading, error, fetchStream } =
+    useFetchStream<ApiResponse>(url, "application/json");
 
   const extract = useCallback(
     (text: string) => {
@@ -30,5 +26,5 @@ export function useExtractAddress() {
     [fetchStream]
   );
 
-  return { data, loading, error, extract };
+  return { data, setData, loading, error, extract };
 }

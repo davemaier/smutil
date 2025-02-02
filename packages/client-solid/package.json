@@ -1,7 +1,7 @@
 {
   "name": "@smutil/client-solid",
-  "private": true,
-  "version": "0.0.0",
+  "private": false,
+  "version": "0.0.1-alpha.1",
   "type": "module",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -18,27 +18,22 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "dev": "vite",
-    "build": "tsup",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "build": "tsup --env.API_BASE_URL http://localhost:3000",
+    "build:prd": "tsup --env.API_BASE_URL https://smutil.dev",
+    "lint": "eslint ."
   },
-  "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+  "peerDependencies": {
+    "solid-js": "^1.9.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
-    "@tanstack/config": "^0.16.1",
-    "@types/react": "^18.3.18",
-    "@types/react-dom": "^18.3.5",
-    "@vitejs/plugin-react-swc": "^3.5.0",
     "eslint": "^9.17.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.16",
     "globals": "^15.14.0",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.18.2",
-    "vite": "^6.0.5"
+    "tsup": "^8.3.6",
+    "@types/node": "^22.13.0"
   }
 }

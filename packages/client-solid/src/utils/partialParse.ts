@@ -1,174 +1,110 @@
-// This is taken from https://github.com/promplate/partial-json-parser-js which is kindly provided under MIT license
-export function parse(jsonString: string): any {
-  if (typeof jsonString !== "string") {
-    throw new TypeError(`expecting str, got ${typeof jsonString}`);
-  }
-  if (!jsonString.trim()) {
-    throw new Error(`${jsonString} is empty`);
-  }
-  return _parseJSON(jsonString.trim());
-}
+type JsonValue =
+  | string
+  | number
+  | boolean
+  | null
+  | JsonValue[]
+  | { [key: string]: JsonValue };
 
-const _parseJSON = (jsonString: string) => {
-  const length = jsonString.length;
+export function parse(jsonString: string): JsonValue {
+  if (typeof jsonString !== "string") throw new TypeError("Expected string");
+  const trimmed = jsonString.trim();
+  if (!trimmed) throw new Error("Empty input");
+
   let index = 0;
+  const len = trimmed.length;
+  const literals = [
+    { p: "null", v: null },
+    { p: "true", v: true },
+    { p: "false", v: false },
+    { p: "Infinity", v: Infinity },
+    { p: "-Infinity", v: -Infinity },
+    { p: "NaN", v: NaN },
+  ];
 
-  const parseAny: () => any = () => {
-    skipBlank();
-    if (index >= length) throw Error("Unexpected end of input");
-    if (jsonString[index] === '"') return parseStr();
-    if (jsonString[index] === "{") return parseObj();
-    if (jsonString[index] === "[") return parseArr();
-    if (
-      jsonString.substring(index, index + 4) === "null" ||
-      (length - index < 4 && "null".startsWith(jsonString.substring(index)))
-    ) {
-      index += 4;
-      return null;
-    }
-    if (
-      jsonString.substring(index, index + 4) === "true" ||
-      (length - index < 4 && "true".startsWith(jsonString.substring(index)))
-    ) {
-      index += 4;
-      return true;
-    }
-    if (
-      jsonString.substring(index, index + 5) === "false" ||
-      (length - index < 5 && "false".startsWith(jsonString.substring(index)))
-    ) {
-      index += 5;
-      return false;
-    }
-    if (
-      jsonString.substring(index, index + 8) === "Infinity" ||
-      (length - index < 8 && "Infinity".startsWith(jsonString.substring(index)))
-    ) {
-      index += 8;
-      return Infinity;
-    }
-    if (
-      jsonString.substring(index, index + 9) === "-Infinity" ||
-      (1 < length - index &&
-        length - index < 9 &&
-        "-Infinity".startsWith(jsonString.substring(index)))
-    ) {
-      index += 9;
-      return -Infinity;
-    }
-    if (
-      jsonString.substring(index, index + 3) === "NaN" ||
-      (length - index < 3 && "NaN".startsWith(jsonString.substring(index)))
-    ) {
-      index += 3;
-      return NaN;
+  const parseAny = (): JsonValue => {
+    skipWS();
+    if (index >= len) throw Error("Unexpected end");
+    const c = trimmed[index];
+    if (c === '"') return parseStr();
+    if (c === "{") return parseObj();
+    if (c === "[") return parseArr();
+    for (const { p, v } of literals) {
+      const sub = trimmed.substr(index, p.length);
+      if (sub === p || (len - index < p.length && p.startsWith(sub))) {
+        index += p.length;
+        return v;
+      }
     }
     return parseNum();
   };
 
-  const parseStr: () => string = () => {
-    const start = index;
-    let escape = false;
-    index++; // skip initial quote
+  const parseStr = (): string => {
+    const start = index++;
     while (
-      index < length &&
-      (jsonString[index] !== '"' || (escape && jsonString[index - 1] === "\\"))
-    ) {
-      escape = jsonString[index] === "\\" ? !escape : false;
+      index < len &&
+      (trimmed[index] !== '"' || trimmed[index - 1] === "\\")
+    )
       index++;
+    const str = trimmed.slice(start, trimmed[index] === '"' ? ++index : index);
+    try {
+      return JSON.parse(str);
+    } catch {
+      // Improved unterminated string handling for dates
+      const lastBackslash = str.lastIndexOf("\\");
+      if (lastBackslash === -1) {
+        return JSON.parse(str + '"');
+      }
+      return JSON.parse(str.slice(0, lastBackslash + 1) + '"');
     }
-    if (jsonString.charAt(index) == '"') {
-      return JSON.parse(jsonString.substring(start, ++index - Number(escape)));
-    } else {
+  };
+
+  const parseObj = (): { [key: string]: JsonValue } => {
+    const obj: { [key: string]: JsonValue } = {};
+    index++;
+    while ((skipWS(), index < len && trimmed[index] !== "}")) {
+      const key = parseStr();
+      skipWS();
+      index++;
+      skipWS();
       try {
-        return JSON.parse(
-          jsonString.substring(start, index - Number(escape)) + '"',
-        );
-      } catch (e) {
-        // SyntaxError: Invalid escape sequence
-        return JSON.parse(
-          jsonString.substring(start, jsonString.lastIndexOf("\\")) + '"',
-        );
+        obj[key] = parseAny();
+      } catch {
+        return obj;
       }
+      skipWS();
+      if (trimmed[index] === ",") index++;
     }
+    return index++, obj;
   };
 
-  const parseObj = () => {
-    index++; // skip initial brace
-    skipBlank();
-    const obj: Record<string, any> = {};
+  const parseArr = (): JsonValue[] => {
+    const arr: JsonValue[] = [];
+    index++;
+    while ((skipWS(), index < len && trimmed[index] !== "]")) {
+      arr.push(parseAny());
+      skipWS();
+      if (trimmed[index] === ",") index++;
+    }
+    return index++, arr;
+  };
+
+  const parseNum = (): number => {
+    const num = (trimmed
+      .substr(index)
+      .match(/^-?(?:0|[1-9]\d*)(?:\.\d*)?(?:[eE][+-]?\d*)?/) || [])[0];
+    if (!num) throw Error("Invalid number");
+    index += num.length;
     try {
-      while (jsonString[index] !== "}") {
-        skipBlank();
-        if (index >= length) return obj;
-        const key = parseStr();
-        skipBlank();
-        index++; // skip colon
-        try {
-          const value = parseAny();
-          obj[key] = value;
-        } catch (e) {
-          return obj;
-        }
-        skipBlank();
-        if (jsonString[index] === ",") index++; // skip comma
-      }
-    } catch (e) {
-      return obj;
-    }
-    index++; // skip final brace
-    return obj;
-  };
-
-  const parseArr = () => {
-    index++; // skip initial bracket
-    const arr = [];
-    try {
-      while (jsonString[index] !== "]") {
-        arr.push(parseAny());
-        skipBlank();
-        if (jsonString[index] === ",") {
-          index++; // skip comma
-        }
-      }
-    } catch (e) {
-      return arr;
-    }
-    index++; // skip final bracket
-    return arr;
-  };
-
-  const parseNum = () => {
-    if (index === 0) {
-      if (jsonString === "-") throw Error("Not sure what '-' is");
-      try {
-        return JSON.parse(jsonString);
-      } catch (e) {
-        return JSON.parse(jsonString.substring(0, jsonString.lastIndexOf("e")));
-      }
-    }
-
-    const start = index;
-
-    if (jsonString[index] === "-") index++;
-    while (jsonString[index] && ",]}".indexOf(jsonString[index]) === -1)
-      index++;
-
-    try {
-      return JSON.parse(jsonString.substring(start, index));
-    } catch (e) {
-      if (jsonString.substring(start, index) === "-")
-        throw Error("Not sure what '-' is");
-      return JSON.parse(
-        jsonString.substring(start, jsonString.lastIndexOf("e")),
-      );
+      return JSON.parse(num);
+    } catch {
+      return JSON.parse(num.replace(/[eE][^+-]*$/, ""));
     }
   };
 
-  const skipBlank = () => {
-    while (index < length && " \n\r\t".includes(jsonString[index])) {
-      index++;
-    }
+  const skipWS = () => {
+    while (index < len && " \t\n\r".includes(trimmed[index])) index++;
   };
+
   return parseAny();
-};
+}

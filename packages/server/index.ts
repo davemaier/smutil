@@ -2,6 +2,7 @@ import { cors } from "@elysiajs/cors";
 import {
   getSingleImageStructuredStream,
   getSingleMessageStructuredStream,
+  models,
   prompts,
 } from "@smutil/core";
 import { Elysia, t } from "elysia";
@@ -44,7 +45,10 @@ const app = new Elysia()
           const prompt = prompts.EXTRACT_ADDRESS;
 
           return getOrCreateStream(cacheKey, async () =>
-            getSingleMessageStructuredStream()(prompt.message, text)
+            getSingleMessageStructuredStream(models.CLAUDE_HAIKU_3)(
+              prompt.message,
+              text
+            )
           );
         },
         simpleTextBody
@@ -57,7 +61,10 @@ const app = new Elysia()
           const prompt = prompts.EXTRACT_EVENT;
 
           return getOrCreateStream(cacheKey, async () =>
-            getSingleMessageStructuredStream()(prompt.message, text)
+            getSingleMessageStructuredStream(models.GPT_4O_MINI)(
+              prompt.message,
+              text
+            )
           );
         },
         simpleTextBody
@@ -70,7 +77,7 @@ const app = new Elysia()
           const prompt = prompts.TRANSLATE_TEXT;
 
           return await getOrCreateStream(cacheKey, () =>
-            getSingleMessageStructuredStream()(
+            getSingleMessageStructuredStream(models.MISTRAL_SMALL_3)(
               prompt.getMessage({ language: targetLanguage }),
               text
             )
@@ -94,7 +101,7 @@ const app = new Elysia()
           const cacheKey = Bun.hash(`classify-image ${base64}`);
 
           return getOrCreateStream(cacheKey, async () =>
-            getSingleImageStructuredStream()(
+            getSingleImageStructuredStream(models.CLAUDE_HAIKU_3)(
               prompts.DETECT_NSFW_IMAGES.message,
               base64
             )
