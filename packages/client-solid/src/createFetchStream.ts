@@ -13,7 +13,7 @@ interface FetchStreamResult<T> {
   fetchStream: (body: BodyInit) => Promise<void>;
 }
 
-const createFetchStream = <T extends Record<string, unknown>>(
+export const createFetchStream = <T extends Record<string, unknown>>(
   url: URL | string,
   contentType?: string
 ): FetchStreamResult<T> => {
@@ -60,6 +60,7 @@ const createFetchStream = <T extends Record<string, unknown>>(
 
           try {
             // Process the chunk with proper type assertion
+
             const parsedData = parse(result) as T;
             setData(() => parsedData);
           } catch (parseError) {
@@ -95,5 +96,3 @@ const createFetchStream = <T extends Record<string, unknown>>(
     fetchStream,
   };
 };
-
-export default createFetchStream;

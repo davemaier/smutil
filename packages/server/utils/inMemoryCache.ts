@@ -24,12 +24,16 @@ export async function getOrCreateStream(
         .filter((line) => line.startsWith("data:"))
         .filter((line) => !line.startsWith("data: [DONE]"))
         .map((line) => JSON.parse(line.split("data:")[1]))
-        .map((data) => data.choices[0].delta.content);
+        .map((data) => data.choices[0].delta.content)
+        .filter(
+          (content) => !["```", "```json", "json", "\n"].includes(content)
+        );
       chunkContent.forEach((content) => controller.enqueue(content));
       chunkContent.forEach((content) => (fullContent += content));
     },
     flush() {
       //cache.set(cacheKey, fullContent);
+      // console.log(fullContent);
     },
   });
 

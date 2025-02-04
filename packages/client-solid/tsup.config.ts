@@ -11,6 +11,7 @@ export default defineConfig({
   target: "es2020", // Modern browser target
   outDir: "dist",
   esbuildOptions(options) {
-    options.jsx = "automatic"; // For React 17+ JSX transform
+    options.jsx = "automatic";
   },
+  external: ["solid-js"],
 });

@@ -1,5 +1,8 @@
-export { useExtractEvent } from "./useEventForm";
-export { useClassifyImage } from "./useClassifyImage";
+export { useTextExtract } from "./useTextExtract";
+export type { TextExtractionAction } from "./useTextExtract";
+
+export { useImageExtract } from "./useImageExtract";
+export type { ImageExtractionAction } from "./useImageExtract";
+
 export { useTranslate } from "./useTranslate";
-export { useExtractStructured } from "./useExtractStructured";
-export { useExtractAddress } from "./useExtractAddress";
+export type { TranslationOptions } from "./useTranslate";

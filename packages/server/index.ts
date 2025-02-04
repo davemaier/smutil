@@ -14,15 +14,7 @@ const simpleTextBody = {
   }),
 };
 
-const freePaths = [
-  "extract-event",
-  "extract-address",
-  "classify-image",
-  "translate",
-];
-
 const app = new Elysia()
-
   .use(cors())
   .onRequest(async ({ request, set }) => {
     const ip = request.headers.get("true-client-ip") ?? "";
@@ -45,7 +37,7 @@ const app = new Elysia()
           const prompt = prompts.EXTRACT_ADDRESS;
 
           return getOrCreateStream(cacheKey, async () =>
-            getSingleMessageStructuredStream(models.CLAUDE_HAIKU_3)(
+            getSingleMessageStructuredStream(models.MISTRAL_SMALL_3)(
               prompt.message,
               text
             )
@@ -61,7 +53,7 @@ const app = new Elysia()
           const prompt = prompts.EXTRACT_EVENT;
 
           return getOrCreateStream(cacheKey, async () =>
-            getSingleMessageStructuredStream(models.GPT_4O_MINI)(
+            getSingleMessageStructuredStream(models.MISTRAL_SMALL_3)(
               prompt.message,
               text
             )

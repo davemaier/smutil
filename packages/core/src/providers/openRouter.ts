@@ -17,8 +17,8 @@ const OPEN_ROUTER_API_URL = "https://openrouter.ai/api/v1";
 const COMPLETIONS_URL = `${OPEN_ROUTER_API_URL}/chat/completions`;
 
 export function getOpenRouterSingleMessageStream(modelSpec: ModelSpecifier) {
-  return async (system: string, text: string) =>
-    fetchWithRetry(() =>
+  return async (system: string, text: string) => {
+    return fetchWithRetry(() =>
       fetch(
         COMPLETIONS_URL,
         getSingleMessageStreamFetchInit(
@@ -27,6 +27,7 @@ export function getOpenRouterSingleMessageStream(modelSpec: ModelSpecifier) {
         )
       )
     );
+  };
 }
 
 export function getOpenRouterSingleImageStream(modelSpec: ModelSpecifier) {
@@ -64,8 +65,11 @@ function getSingleMessageStreamFetchInit(
         data_collection: "deny",
         order: modelSpec.providers,
       },
+      temperature: modelSpec.temperature,
+      top_p: modelSpec.top_p,
+      structured_output: modelSpec.structured_output,
       messages: [{ role: "user", content }],
-      stream: true, // Ensure streaming is enabled
+      stream: true,
     }),
   };
 }

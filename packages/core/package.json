@@ -1,9 +1,13 @@
 {
   "name": "@smutil/core",
+  "version": "0.0.1-alpha.2",
   "module": "index.ts",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc --build",
     "dev": "tsc --build --watch"
