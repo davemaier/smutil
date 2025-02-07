@@ -8,8 +8,7 @@
   "exports": {
     ".": {
       "require": "./dist/index.cjs",
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "import": "./dist/index.js"
     }
   },
   "files": [
@@ -17,8 +16,9 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "build": "rm -r dist && tsup --env.API_BASE_URL http://localhost:3000",
-    "build:prd": "rm -r dist && tsup --env.API_BASE_URL https://smutil.dev",
+    "dev": "bun run build --watch",
+    "build": "tsup --env.API_BASE_URL http://localhost:3000",
+    "build:prd": "tsup --env.API_BASE_URL https://smutil.dev",
     "lint": "eslint ."
   },
   "peerDependencies": {

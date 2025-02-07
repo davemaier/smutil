@@ -3,12 +3,17 @@
   "private": false,
   "version": "0.0.1-alpha.2",
   "type": "module",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+    "solid": "./dist/index.jsx",
+    "import": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "require": {
+      "types": "./dist/index.d.cts",
+      "default": "./dist/index.cjs"
     }
   },
   "files": [
@@ -16,6 +21,7 @@
   ],
   "sideEffects": false,
   "scripts": {
+    "dev": "tsup --watch --env.API_BASE_URL http://localhost:3000",
     "build": "tsup --env.API_BASE_URL http://localhost:3000",
     "build:prd": "tsup --env.API_BASE_URL https://smutil.dev",
     "lint": "eslint ."
@@ -25,13 +31,20 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
+    "@types/node": "^22.13.0",
     "eslint": "^9.17.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.16",
     "globals": "^15.14.0",
-    "typescript": "~5.6.2",
-    "typescript-eslint": "^8.18.2",
     "tsup": "^8.3.6",
-    "@types/node": "^22.13.0"
-  }
+    "tsup-preset-solid": "^2.2.0",
+    "typescript": "~5.6.2",
+    "typescript-eslint": "^8.18.2"
+  },
+  "dependencies": {
+    "json-schema-to-ts": "^3.1.1"
+  },
+  "main": "./dist/index.cjs",
+  "browser": {},
+  "typesVersions": {}
 }

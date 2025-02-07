@@ -1,5 +1,5 @@
-import { createFetchStream } from "./createFetchStream";
-import { readAndCompressImage } from "./utils/resizeImage";
+import { createFetchStream } from "./createFetchStream.js";
+import { readAndCompressImage } from "./utils/resizeImage.js";
 
 // Define all possible image extraction actions
 export type ImageExtractionAction = "nsfw";
@@ -13,9 +13,10 @@ type ActionResponseTypes = {
 };
 
 export function useImageExtract<T extends ImageExtractionAction>(action: T) {
-  const url = new URL(`/stream/image-extract`, process.env.API_BASE_URL);
-  const { data, loading, error, fetchStream } =
-    createFetchStream<ActionResponseTypes[T]>(url);
+  const url = new URL(`/stream/image-extract`, process.env["API_BASE_URL"]);
+  const { data, loading, error, fetchStream } = createFetchStream<
+    ActionResponseTypes[T]
+  >(url);
 
   const extract = async (image: File) => {
     const resizedImage = await readAndCompressImage(image, {

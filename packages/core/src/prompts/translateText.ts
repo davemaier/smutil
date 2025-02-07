@@ -11,11 +11,11 @@ export const translate = (language: string) => ({
   
   Example:
   Input:
-  [ "Hallo wie gehts?", "Ich bin ein Mensch." ]
+  { "i3jy": "Hallo wie gehts?", "e321": "Ich bin ein Mensch." }
   Output:
   { 
-    "Hallo wie gehts?": "Hello, how are you?",
-    "Ich bin ein Mensch.": "I am a human."
+    "i3jy": { "t": "Hello, how are you?", "l": "en" },
+    "e321": { "t":  "I am a human.", "l": "en" }
   }
   `,
 });

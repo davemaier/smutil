@@ -1,21 +1,22 @@
 {
   "compilerOptions": {
-    "target": "ESNext", // Use the latest ECMAScript features
-    "module": "ESNext", // Use ES modules for bundling (rollup, vite, etc.)
-    "jsx": "preserve", // Preserve JSX so that your build tool (e.g. Babel, Vite) can transform it
-    "jsxImportSource": "solid-js", // Tells TS to use SolidJS’s JSX factory
-    "lib": ["DOM", "DOM.Iterable", "ESNext"], // Include standard library definitions
-    "declaration": true, // Generate .d.ts declaration files for consumers of your library
-    "declarationDir": "dist/types", // Output directory for declaration files
-    "sourceMap": true, // Generate source maps for easier debugging
-    "outDir": "dist", // Output directory for compiled files
-    "strict": true, // Enable all strict type-checking options
-    "moduleResolution": "Node", // Use Node-style module resolution
-    "esModuleInterop": true, // Enable compatibility with CommonJS modules
-    "skipLibCheck": true, // Skip type checking of declaration files for faster builds
-    "forceConsistentCasingInFileNames": true, // Ensure consistent file naming across platforms
-    "isolatedModules": true // Ensure each file can be safely transpiled independently
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ESNext", "DOM"],
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "types": ["node"],
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "noUncheckedIndexedAccess": true,
+    "noPropertyAccessFromIndexSignature": true
   },
-  "include": ["src/**/*"], // Include all source files
-  "exclude": ["node_modules", "dist"] // Exclude node_modules and build output
+  "exclude": ["node_modules", "dist"],
+  "include": ["src", "./tsup.config.ts"]
 }

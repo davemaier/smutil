@@ -1,5 +1,6 @@
 import { createSignal, Accessor } from "solid-js";
-import { parse } from "./utils/partialParse";
+import { createStore } from "solid-js/store";
+import { parse } from "./utils/partialParse.js";
 
 interface ReadableStreamReadResult<T = Uint8Array> {
   done: boolean;
@@ -7,30 +8,39 @@ interface ReadableStreamReadResult<T = Uint8Array> {
 }
 
 interface FetchStreamResult<T> {
-  data: Accessor<T | null>;
+  data: T;
+  setData: (data: T) => void;
   loading: Accessor<boolean>;
   error: Accessor<Error | null>;
-  fetchStream: (body: BodyInit) => Promise<void>;
+  fetchStream: (body: BodyInit, options?: RequestInit) => Promise<void>;
 }
 
 export const createFetchStream = <T extends Record<string, unknown>>(
   url: URL | string,
   contentType?: string
 ): FetchStreamResult<T> => {
-  const [data, setData] = createSignal<T | null>(null);
+  const [data, setData] = createStore<T>({} as T);
   const [loading, setLoading] = createSignal<boolean>(false);
   const [error, setError] = createSignal<Error | null>(null);
 
-  const fetchStream = async (body: BodyInit): Promise<void> => {
+  const fetchStream = async (
+    body: BodyInit,
+    options?: RequestInit
+  ): Promise<void> => {
     try {
       setLoading(true);
       setError(null);
-      setData(null);
+      setData({} as T);
 
-      const response = await fetch(url, {
+      const defaultOptions: RequestInit = {
         method: "POST",
         ...(contentType ? { headers: { "Content-Type": contentType } } : {}),
         body,
+      };
+
+      const response = await fetch(url, {
+        ...defaultOptions,
+        ...options,
       });
 
       if (!response.ok) {
@@ -59,10 +69,8 @@ export const createFetchStream = <T extends Record<string, unknown>>(
           result += decoder.decode(value, { stream: true });
 
           try {
-            // Process the chunk with proper type assertion
-
             const parsedData = parse(result) as T;
-            setData(() => parsedData);
+            setData(parsedData);
           } catch (parseError) {
             const errorMessage =
               parseError instanceof Error
@@ -72,18 +80,16 @@ export const createFetchStream = <T extends Record<string, unknown>>(
           }
         }
 
-        // Read the next chunk
         const nextChunk = await reader.read();
         return processStream(nextChunk);
       };
 
-      // Start reading the stream
       const firstChunk = await reader.read();
       await processStream(firstChunk);
     } catch (err) {
-      const error = err instanceof Error ? err : new Error(String(err));
-      setError(() => error);
-      throw error;
+      const errorObj = err instanceof Error ? err : new Error(String(err));
+      setError(() => errorObj);
+      throw errorObj;
     } finally {
       setLoading(false);
     }
@@ -91,6 +97,7 @@ export const createFetchStream = <T extends Record<string, unknown>>(
 
   return {
     data,
+    setData,
     loading,
     error,
     fetchStream,

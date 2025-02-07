@@ -1,4 +1,4 @@
-import { createFetchStream } from "./createFetchStream";
+import { createFetchStream } from "./createFetchStream.js";
 import { FromSchema, JSONSchema } from "json-schema-to-ts";
 
 // Define all possible text extraction actions
@@ -39,7 +39,7 @@ export function useTextExtract<
   T extends TextExtractionAction,
   S extends JSONSchema | undefined = undefined
 >(action: T, schema?: S) {
-  const url = new URL(`/stream/text-extract`, process.env.API_BASE_URL);
+  const url = new URL(`/stream/text-extract`, process.env["API_BASE_URL"]);
   const { data, loading, error, fetchStream } = createFetchStream<
     ActionResponseTypes<S>[T]
   >(url, "application/json");
