@@ -31,7 +31,15 @@ jobs:
       - name: Install dependencies
         run: bun install
 
-      - name: Release
+      - name: Release packages
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: bunx semantic-release
+        run: |
+          for dir in packages/*; do
+            if [ -f "$dir/package.json" ]; then
+              echo "Publishing $dir"
+              cd $dir
+              bunx semantic-release -e semantic-release-monorepo
+              cd ../..
+            fi
+          done
