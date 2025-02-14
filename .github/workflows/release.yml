@@ -29,7 +29,7 @@ jobs:
           bun-version: latest
 
       - name: Install dependencies
-        run: bun install --filter './'
+        run: bun install
 
       - name: Release
         env:
