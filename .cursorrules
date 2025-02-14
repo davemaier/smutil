@@ -1,0 +1,8 @@
+{
+  "package_manager": "bun",
+  "package_manager_command": "bun",
+  "install_command": "bun install",
+  "add_command": "bun add",
+  "remove_command": "bun remove",
+  "run_command": "bun run"
+}

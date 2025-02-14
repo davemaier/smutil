@@ -2,7 +2,8 @@
   "name": "smutil",
   "scripts": {
     "dev": "bun run --filter='*' dev",
-    "dev:backend": "bun run --filter='{server,@smutil/core}' dev"
+    "dev:backend": "bun run --filter='{server,@smutil/core}' dev",
+    "release": "semantic-release"
   },
   "workspaces": [
     "packages/*"
@@ -10,7 +11,12 @@
   "module": "index.ts",
   "type": "module",
   "devDependencies": {
-    "@types/bun": "latest"
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^13.0.1",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/release-notes-generator": "^14.0.3",
+    "@types/bun": "latest",
+    "semantic-release": "^24.2.2"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
