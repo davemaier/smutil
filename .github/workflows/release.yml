@@ -34,4 +34,4 @@ jobs:
       - name: Release
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: bun run release
+        run: bunx semantic-release

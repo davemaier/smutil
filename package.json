@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "bun run --filter='*' dev",
     "dev:backend": "bun run --filter='{server,@smutil/core}' dev",
-    "release": "semantic-release"
+    "release": "semantic-release",
+    "prerelease": "echo 'Running prerelease tasks' && bun run --filter='*' build"
   },
   "workspaces": [
     "packages/*"
