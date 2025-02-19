@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@elysiajs/cors": "^1.2.0",
-    "@smutil/core": "workspace:*",
     "elysia": "^1.2.10",
     "jose": "^5.9.6"
   },
