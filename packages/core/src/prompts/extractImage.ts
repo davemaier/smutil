@@ -1,4 +1,4 @@
-export const schema = (schema: string) => ({
+export const schema = ({ schema }: { schema: object }) => ({
   message: `You are an expert at extracting structured information from images. You will be given an image and should extract information according to the given structure. Take the structure from the following schema:${schema}. 
 
 For each field in the schema:
