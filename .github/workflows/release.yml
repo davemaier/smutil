@@ -36,11 +36,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          for dir in packages/*; do
-            if [ -f "$dir/package.json" ]; then
-              echo "Publishing $dir"
-              cd $dir
-              bunx semantic-release -e semantic-release-monorepo
-              cd ../..
-            fi
+          for dir in packages/client-react packages/client-solid packages/core; do
+            echo "Publishing $dir"
+            cd $dir
+            bunx semantic-release -e semantic-release-monorepo
+            cd ../..
           done
