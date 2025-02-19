@@ -2,7 +2,7 @@ import { createFetchStream } from "./createFetchStream.js";
 import { FromSchema, JSONSchema } from "json-schema-to-ts";
 
 // Define all possible text extraction actions
-export type TextExtractionAction = "address" | "event" | "schema";
+export type TextExtractionAction = "address" | "event" | "textSchema";
 
 // Type mapping for response types based on action
 type ActionResponseTypes<S extends JSONSchema | undefined = undefined> = {
@@ -25,7 +25,7 @@ type ActionResponseTypes<S extends JSONSchema | undefined = undefined> = {
     start_time: string;
     end_time: string;
   } & Record<string, unknown>;
-  schema: S extends JSONSchema
+  textSchema: S extends JSONSchema
     ? FromSchema<S> & Record<string, unknown>
     : Record<string, unknown>;
 };

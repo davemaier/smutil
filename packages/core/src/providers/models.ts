@@ -35,7 +35,6 @@ export const models = {
     model: "google/gemini-2.0-flash-001",
   },
 };
-
 export interface ModelSpecifier {
   model: string;
   providers: string[];

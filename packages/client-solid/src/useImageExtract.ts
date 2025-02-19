@@ -3,7 +3,7 @@ import { readAndCompressImage } from "./utils/resizeImage.js";
 import { FromSchema, JSONSchema } from "json-schema-to-ts";
 
 // Define all possible image extraction actions
-export type ImageExtractionAction = "nsfw" | "schema";
+export type ImageExtractionAction = "nsfw" | "imageSchema";
 
 // Type mapping for response types based on action
 type ActionResponseTypes<S extends JSONSchema | undefined = undefined> = {
@@ -11,7 +11,7 @@ type ActionResponseTypes<S extends JSONSchema | undefined = undefined> = {
     explicit: boolean;
     alt_tag: string;
   };
-  schema: S extends JSONSchema
+  imageSchema: S extends JSONSchema
     ? FromSchema<S> & Record<string, unknown>
     : Record<string, unknown>;
 };
