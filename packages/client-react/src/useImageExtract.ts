@@ -1,22 +1,28 @@
 import { useCallback } from "react";
+import type { FromSchema, JSONSchema } from "json-schema-to-ts";
 import useFetchStream from "./useFetchStream";
 import { readAndCompressImage } from "./utils/resizeImage";
 
 // Define all possible image extraction actions
-export type ImageExtractionAction = "nsfw";
+export type ImageExtractionAction = "nsfw" | "schema";
 
 // Type mapping for response types based on action
-type ActionResponseTypes = {
+type ActionResponseTypes<S extends JSONSchema | undefined = undefined> = {
   nsfw: {
     explicit: boolean;
     alt_tag: string;
   };
+  schema: S extends JSONSchema ? FromSchema<S> : Record<string, unknown>;
 };
 
-export function useImageExtract<T extends ImageExtractionAction>(action: T) {
+export function useImageExtract<
+  T extends ImageExtractionAction,
+  S extends JSONSchema | undefined = undefined
+>(action: T, schema?: S) {
   const url = new URL(`/stream/image-extract`, process.env.API_BASE_URL);
-  const { data, loading, error, fetchStream } =
-    useFetchStream<ActionResponseTypes[T]>(url);
+  const { data, loading, error, fetchStream } = useFetchStream<
+    ActionResponseTypes<S>[T] & Record<string, unknown>
+  >(url);
 
   const extract = useCallback(
     async (image: File) => {
@@ -29,10 +35,17 @@ export function useImageExtract<T extends ImageExtractionAction>(action: T) {
 
       data.append("image", resizedImage);
       data.append("action", action);
+      data.append(
+        "metadata",
+        JSON.stringify({
+          userTimestamp: new Date().toISOString(),
+          schema: schema ? JSON.stringify(schema) : undefined,
+        })
+      );
 
       fetchStream(data);
     },
-    [action, fetchStream]
+    [action, schema, fetchStream]
   );
 
   return {

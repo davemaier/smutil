@@ -30,6 +30,10 @@ export const models = {
     top_p: 0.9,
     structured_output: true,
   },
+  GEMINI_2_FLASH: {
+    providers: ["Google AI Studio"],
+    model: "google/gemini-2.0-flash-001",
+  },
 };
 
 export interface ModelSpecifier {
