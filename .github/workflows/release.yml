@@ -53,6 +53,11 @@ jobs:
       - name: Fetch latest tags
         run: git fetch --tags
 
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
       - name: Get latest version
         id: get_version
         run: |
@@ -78,17 +83,10 @@ jobs:
           git commit -m "chore: release ${{ steps.get_version.outputs.version }}"
           git push
 
+      - name: Build packages
+        run: bun run build
+
       - name: Publish packages
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          find packages -name package.json | while read pkgjson; do
-            pkgdir=$(dirname "$pkgjson")
-            pkg_name=$(jq -r .name "$pkgjson")
-            private=$(jq -r .private "$pkgjson")
-            
-            if [ "$private" != "true" ] && [ "$pkg_name" != "null" ]; then
-              echo "Publishing $pkg_name from $pkgdir"
-              npm publish "$pkgdir" --registry=https://registry.npmjs.org/
-            fi
-          done
+        run: bun run publish
