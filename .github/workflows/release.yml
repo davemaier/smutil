@@ -40,6 +40,9 @@ jobs:
     name: Publish
     needs: release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -67,8 +70,10 @@ jobs:
 
       - name: Commit version updates
         run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
+          git config --global user.name "David Maier"
+          git config --global user.email "david@davidmaier.at"
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git remote set-url origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
           git add packages/*/package.json
           git commit -m "chore: release ${{ steps.tag_version.outputs.version }}"
           git push
