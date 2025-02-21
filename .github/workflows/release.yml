@@ -83,6 +83,9 @@ jobs:
           git commit -m "chore: release ${{ steps.get_version.outputs.version }}"
           git push
 
+      - name: Install dependencies
+        run: bun install
+
       - name: Build packages
         run: bun run build
 
