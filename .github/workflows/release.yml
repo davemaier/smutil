@@ -89,6 +89,6 @@ jobs:
             
             if [ "$private" != "true" ] && [ "$pkg_name" != "null" ]; then
               echo "Publishing $pkg_name from $pkgdir"
-              npm publish "$pkgdir"
+              npm publish "$pkgdir" --registry=https://registry.npmjs.org/
             fi
           done
