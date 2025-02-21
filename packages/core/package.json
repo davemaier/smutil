@@ -10,6 +10,7 @@
   ],
   "scripts": {
     "build": "tsc --build",
+    "build:prd": "tsc --build",
     "dev": "tsc --build --watch",
     "publish": "bun publish"
   },
