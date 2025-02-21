@@ -1,7 +1,7 @@
 {
   "name": "@smutil/client-solid",
   "private": false,
-  "version": "refs/heads/alpha",
+  "version": "1.0.0-alpha.8",
   "type": "module",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
