@@ -19,7 +19,8 @@
     "dev": "bun run build --watch",
     "build": "tsup --env.API_BASE_URL http://localhost:3000",
     "build:prd": "tsup --env.API_BASE_URL https://smutil.dev",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "publish": "bun publish"
   },
   "peerDependencies": {
     "react": "^18.3.1",

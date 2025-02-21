@@ -24,7 +24,8 @@
     "dev": "tsup --watch --env.API_BASE_URL http://localhost:3000",
     "build": "tsup --env.API_BASE_URL http://localhost:3000",
     "build:prd": "tsup --env.API_BASE_URL https://api.smutil.dev",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "publish": "bun publish"
   },
   "peerDependencies": {
     "solid-js": "^1.9.4"
