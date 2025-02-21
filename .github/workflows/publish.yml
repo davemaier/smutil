@@ -1,9 +1,10 @@
 name: Publish Packages
 
 on:
-  push:
-    tags:
-      - "**"
+  workflow_run:
+    workflows: ["Release"]
+    types:
+      - completed
 
 jobs:
   release:
