@@ -1,5 +1,4 @@
 {
-  "extends": "semantic-release-monorepo",
   "branches": [
     "main",
     {
@@ -15,16 +14,24 @@
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
     "@semantic-release/changelog",
-    "@semantic-release/npm",
+    [
+      "@semantic-release/npm",
+      {
+        "npmPublish": false
+      }
+    ],
     [
       "@semantic-release/git",
       {
         "assets": ["package.json", "CHANGELOG.md"],
         "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
+    ],
+    [
+      "@semantic-release/exec",
+      {
+        "publishCmd": "npm publish packages/core && npm publish packages/client-solid && npm publish packages/client-react"
+      }
     ]
-  ],
-  "hooks": {
-    "prerelease": "bun run prerelease"
-  }
+  ]
 }

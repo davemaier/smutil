@@ -8,14 +8,5 @@ For each field in the schema:
 
 Always return valid JSON matching the provided schema structure. Never include any explanatory text or additional information outside the JSON structure.
 
-Example schema:
-{
-  "product": {
-    "name": "string",
-    "color": "string",
-    "condition": "string"
-  }
-}
-
-This would extract product details visible in the image like name, color, and condition state.`,
+`,
 });
