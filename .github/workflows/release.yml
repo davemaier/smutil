@@ -35,3 +35,57 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: bunx semantic-release
+
+  publish:
+    name: Publish
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Get tag version
+        id: tag_version
+        run: |
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          VERSION=${TAG_NAME#v}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Update package versions
+        run: |
+          VERSION="${{ steps.tag_version.outputs.version }}"
+          # Find all package.json files in packages directory
+          find packages -name package.json | while read pkgjson; do
+            # Update version using jq
+            jq --arg v "$VERSION" '.version = $v' "$pkgjson" > temp.json
+            mv temp.json "$pkgjson"
+            echo "Updated $pkgjson to version $VERSION"
+          done
+
+      - name: Commit version updates
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add packages/*/package.json
+          git commit -m "chore: release ${{ steps.tag_version.outputs.version }}"
+          git push
+
+      - name: Publish packages
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          find packages -name package.json | while read pkgjson; do
+            pkgdir=$(dirname "$pkgjson")
+            # Get actual package name from package.json
+            pkg_name=$(jq -r .name "$pkgjson")
+            # Skip private packages
+            private=$(jq -r .private "$pkgjson")
+            
+            if [ "$private" != "true" ] && [ "$pkg_name" != "null" ]; then
+              echo "Publishing $pkg_name from $pkgdir"
+              npm publish "$pkgdir"
+            fi
+          done
