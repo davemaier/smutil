@@ -1,6 +1,6 @@
 {
   "name": "@smutil/client-react",
-  "version": "0.0.1-alpha1",
+  "version": "refs/heads/alpha",
   "type": "module",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
