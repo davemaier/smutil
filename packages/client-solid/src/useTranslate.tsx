@@ -28,6 +28,7 @@ export function useTranslate(lang: string) {
     fetchStream(
       JSON.stringify({
         texts: unwrap(pending),
+        action: "translateUI",
         targetLanguage: targetLang(),
       })
     );

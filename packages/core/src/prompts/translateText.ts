@@ -1,4 +1,4 @@
-export const translate = (language: string) => ({
+export const translateUI = (language: string) => ({
   message: `You are a professional translator.
   I give you text in an array and you translate the text to the target language.
   The target language is ${language}.

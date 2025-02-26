@@ -76,6 +76,7 @@ export function useTranslate(initialLang: string) {
 
     fetchStream(
       JSON.stringify({
+        action: "translateUI",
         texts: batch.reduce((acc, [id, text]) => {
           acc[id] = text;
           return acc;
