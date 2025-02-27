@@ -57,8 +57,13 @@ export function useTextExtract<
       text,
       action,
       metadata: JSON.stringify({
-        userTimestamp: new Date().toISOString(),
-        schema: JSON.stringify(schema),
+        ...(action === "event" && {
+          userTimestamp: new Date().toISOString(),
+        }),
+        ...(action === "textSchema" && {
+          userTimestamp: new Date().toISOString(),
+          schema: JSON.stringify(schema),
+        }),
       }),
     };
 
