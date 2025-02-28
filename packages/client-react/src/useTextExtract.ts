@@ -1,6 +1,8 @@
 import { useCallback } from "react";
 import type { FromSchema, JSONSchema } from "json-schema-to-ts";
 import useFetchStream from "./useFetchStream";
+import type { ClientConfig } from "./types/config";
+import { useSmutilMergedConfig } from "./SmutilConfigProvider";
 
 // Define all possible text extraction actions
 export type TextExtractionAction = "personalInfo" | "event" | "textSchema";
@@ -40,8 +42,11 @@ type ActionResponseTypes<S extends JSONSchema | undefined = undefined> = {
 export function useTextExtract<
   T extends TextExtractionAction,
   S extends JSONSchema | undefined = undefined
->(action: T, schema?: S) {
-  const url = new URL(`/stream/text-extract`, process.env.API_BASE_URL);
+>(action: T, schema?: S, config?: ClientConfig) {
+  // Merge local config with global config
+  const mergedConfig = useSmutilMergedConfig(config);
+  const baseUrl = mergedConfig?.apiUrl || process.env.API_BASE_URL;
+  const url = new URL(`/stream/text-extract`, baseUrl);
   const { data, loading, error, fetchStream } = useFetchStream<
     ActionResponseTypes<S>[T] & Record<string, unknown>
   >(url, "application/json");

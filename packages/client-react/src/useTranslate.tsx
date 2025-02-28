@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import useFetchStream from "./useFetchStream";
+import type { ClientConfig } from "./types/config";
+import { useSmutilMergedConfig } from "./SmutilConfigProvider";
 
 interface TranslationContext {
   translations: Map<string, { t: string }>;
@@ -7,9 +9,8 @@ interface TranslationContext {
   inFlight: Map<string, string>;
 }
 
-export function useTranslate(initialLang: string) {
-  const [targetLang, setTargetLang] = useState(initialLang);
-  const [_, forceUpdate] = useState(0); // Now properly used for triggering updates
+export function useTranslate(initialLang?: string, config?: ClientConfig) {
+  const [, forceUpdate] = useState(0); // Used for triggering updates
 
   const contextRef = useRef<TranslationContext>({
     translations: new Map(),
@@ -20,9 +21,18 @@ export function useTranslate(initialLang: string) {
   const loadingRef = useRef(false);
   // const updateKeyRef = useRef(0);
 
+  // Merge local config with global config
+  const mergedConfig = useSmutilMergedConfig(config);
+
+  // Use provided language, or fall back to config language, or default to 'en'
+  const [targetLang, setTargetLang] = useState(
+    initialLang || mergedConfig?.language || "en"
+  );
+
+  const baseUrl = mergedConfig?.apiUrl || process.env.API_BASE_URL;
   const { data, loading, error, fetchStream } = useFetchStream<
     Record<string, { t: string }>
-  >(new URL("/stream/translate", process.env.API_BASE_URL), "application/json");
+  >(new URL("/stream/translate", baseUrl), "application/json");
 
   // Sync loading state
   useEffect(() => {

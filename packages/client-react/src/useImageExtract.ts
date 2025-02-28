@@ -2,6 +2,8 @@ import { useCallback } from "react";
 import type { FromSchema, JSONSchema } from "json-schema-to-ts";
 import useFetchStream from "./useFetchStream";
 import { readAndCompressImage } from "./utils/resizeImage";
+import type { ClientConfig } from "./types/config";
+import { useSmutilMergedConfig } from "./SmutilConfigProvider";
 
 // Define all possible image extraction actions
 export type ImageExtractionAction = "nsfw" | "imageSchema";
@@ -18,8 +20,11 @@ type ActionResponseTypes<S extends JSONSchema | undefined = undefined> = {
 export function useImageExtract<
   T extends ImageExtractionAction,
   S extends JSONSchema | undefined = undefined
->(action: T, schema?: S) {
-  const url = new URL(`/stream/image-extract`, process.env.API_BASE_URL);
+>(action: T, schema?: S, config?: ClientConfig) {
+  // Merge local config with global config
+  const mergedConfig = useSmutilMergedConfig(config);
+  const baseUrl = mergedConfig?.apiUrl || process.env.API_BASE_URL;
+  const url = new URL(`/stream/image-extract`, baseUrl);
   const { data, loading, error, fetchStream } = useFetchStream<
     ActionResponseTypes<S>[T] & Record<string, unknown>
   >(url);

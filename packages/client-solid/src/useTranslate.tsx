@@ -1,19 +1,26 @@
 import { createSignal, onCleanup } from "solid-js";
 import { createFetchStream } from "./createFetchStream.js";
 import { createStore, reconcile, unwrap } from "solid-js/store";
+import type { ClientConfig } from "./types/config.js";
+import { useSmutilMergedConfig } from "./SmutilConfigProvider.js";
 
-export function useTranslate(lang: string) {
+export function useTranslate(lang?: string, config?: ClientConfig) {
   // Create signals for target language and translation context.
-  const [targetLang, setTargetLang] = createSignal(lang);
   const [pending, setPending] = createStore<Record<string, string>>({});
   const [existing, setExisting] = createStore<Record<string, string>>({});
 
+  // Merge local config with global config
+  const mergedConfig = useSmutilMergedConfig(config);
+
+  // Use provided language, or fall back to config language, or default to 'en'
+  const [targetLang, setTargetLang] = createSignal(
+    lang || mergedConfig?.language || "en"
+  );
+
+  const baseUrl = mergedConfig?.apiUrl || process.env["API_BASE_URL"];
   const { data, setData, error, fetchStream } = createFetchStream<
     Record<string, { t: string; l: string }>
-  >(
-    new URL("/stream/translate", process.env["API_BASE_URL"]),
-    "application/json"
-  );
+  >(new URL("/stream/translate", baseUrl), "application/json");
 
   // Reset our translation context whenever the target language changes.
   const setTargetLanguage = (lang: string) => {
