@@ -25,12 +25,12 @@ export function parse(jsonString: string): JsonValue {
   const parseAny = (): JsonValue => {
     skipWS();
     if (index >= len) throw Error("Unexpected end");
-    const c = trimmed[index];
+    const c = trimmed.charAt(index);
     if (c === '"') return parseStr();
     if (c === "{") return parseObj();
     if (c === "[") return parseArr();
     for (const { p, v } of literals) {
-      const sub = trimmed.substr(index, p.length);
+      const sub = trimmed.slice(index, index + p.length);
       if (sub === p || (len - index < p.length && p.startsWith(sub))) {
         index += p.length;
         return v;
@@ -43,10 +43,13 @@ export function parse(jsonString: string): JsonValue {
     const start = index++;
     while (
       index < len &&
-      (trimmed[index] !== '"' || trimmed[index - 1] === "\\")
+      (trimmed.charAt(index) !== '"' || trimmed.charAt(index - 1) === "\\")
     )
       index++;
-    const str = trimmed.slice(start, trimmed[index] === '"' ? ++index : index);
+    const str = trimmed.slice(
+      start,
+      trimmed.charAt(index) === '"' ? ++index : index
+    );
     try {
       return JSON.parse(str);
     } catch {
@@ -62,7 +65,7 @@ export function parse(jsonString: string): JsonValue {
   const parseObj = (): { [key: string]: JsonValue } => {
     const obj: { [key: string]: JsonValue } = {};
     index++;
-    while ((skipWS(), index < len && trimmed[index] !== "}")) {
+    while ((skipWS(), index < len && trimmed.charAt(index) !== "}")) {
       const key = parseStr();
       skipWS();
       index++;
@@ -73,7 +76,7 @@ export function parse(jsonString: string): JsonValue {
         return obj;
       }
       skipWS();
-      if (trimmed[index] === ",") index++;
+      if (trimmed.charAt(index) === ",") index++;
     }
     return index++, obj;
   };
@@ -81,17 +84,17 @@ export function parse(jsonString: string): JsonValue {
   const parseArr = (): JsonValue[] => {
     const arr: JsonValue[] = [];
     index++;
-    while ((skipWS(), index < len && trimmed[index] !== "]")) {
+    while ((skipWS(), index < len && trimmed.charAt(index) !== "]")) {
       arr.push(parseAny());
       skipWS();
-      if (trimmed[index] === ",") index++;
+      if (trimmed.charAt(index) === ",") index++;
     }
     return index++, arr;
   };
 
   const parseNum = (): number => {
     const num = (trimmed
-      .substr(index)
+      .slice(index)
       .match(/^-?(?:0|[1-9]\d*)(?:\.\d*)?(?:[eE][+-]?\d*)?/) || [])[0];
     if (!num) throw Error("Invalid number");
     index += num.length;
@@ -103,7 +106,12 @@ export function parse(jsonString: string): JsonValue {
   };
 
   const skipWS = () => {
-    while (index < len && " \t\n\r".includes(trimmed[index])) index++;
+    while (index < len) {
+      const char = trimmed.charAt(index);
+      if (char !== " " && char !== "\t" && char !== "\n" && char !== "\r")
+        break;
+      index++;
+    }
   };
 
   return parseAny();

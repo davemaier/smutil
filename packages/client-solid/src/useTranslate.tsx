@@ -54,12 +54,12 @@ export function useTranslate(lang?: string, config?: ClientConfig) {
     return data[id]?.l !== targetLang();
   };
 
-  const isBaseLang = (text: string, baseLang?: string) => {
+  const isBaseLang = (baseLang?: string) => {
     return baseLang && baseLang.toLowerCase() === targetLang().toLowerCase();
   };
   // The translation function `t` returns JSX elements.
   const t = (text: string, baseLang?: string) => {
-    const id = Math.random().toString(36).slice(2, 6);
+    const id = hashString(text);
     setData({ [id]: { t: text, l: baseLang ?? "" } });
 
     setPending((prev) => ({ ...prev, [id]: text }));
@@ -67,10 +67,8 @@ export function useTranslate(lang?: string, config?: ClientConfig) {
     scheduleBatch();
 
     return (
-      <span
-        data-translation-loading={!isBaseLang(text, baseLang) && loading(id)}
-      >
-        {isBaseLang(text, baseLang) || loading(id) ? text : data[id]?.t}
+      <span data-translation-loading={!isBaseLang(baseLang) && loading(id)}>
+        {isBaseLang(baseLang) || loading(id) ? text : data[id]?.t}
       </span>
     );
   };
@@ -88,3 +86,12 @@ export function useTranslate(lang?: string, config?: ClientConfig) {
     currentLanguage: targetLang,
   };
 }
+
+const hashString = (s: string): string => {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) {
+    h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+  }
+  // 36^4 === 1679616, so using modulo ensures a max of 4 base36 digits.
+  return (Math.abs(h) % 1679616).toString(36).padStart(4, "0");
+};
