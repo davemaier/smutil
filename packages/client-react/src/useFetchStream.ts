@@ -8,7 +8,8 @@ interface ReadableStreamReadResult<T = Uint8Array> {
 
 export function useFetchStream<T extends Record<string, unknown>>(
   url: URL | string,
-  contentType?: string
+  contentType?: string,
+  apiKey?: string
 ) {
   const [data, setData] = useState<T>({} as T);
   const [loading, setLoading] = useState<boolean>(false);
@@ -21,9 +22,17 @@ export function useFetchStream<T extends Record<string, unknown>>(
         setError(null);
         setData({} as T);
 
+        const headers: Record<string, string> = {};
+        if (contentType) {
+          headers["Content-Type"] = contentType;
+        }
+        if (apiKey) {
+          headers["X-API-KEY"] = apiKey;
+        }
+  
         const response = await fetch(url, {
           method: "POST",
-          ...(contentType ? { headers: { "Content-Type": contentType } } : {}),
+          headers: headers,
           body,
         });
 
@@ -81,8 +90,8 @@ export function useFetchStream<T extends Record<string, unknown>>(
         setLoading(false);
       }
     },
-    [url, contentType]
-  );
+    [url, contentType, apiKey]
+    );
 
   return {
     data,

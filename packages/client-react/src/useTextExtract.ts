@@ -46,10 +46,11 @@ export function useTextExtract<
   // Merge local config with global config
   const mergedConfig = useSmutilMergedConfig(config);
   const baseUrl = mergedConfig?.apiUrl || process.env.API_BASE_URL;
+  const apiKey = mergedConfig?.apiKey;
   const url = new URL(`/stream/text-extract`, baseUrl);
   const { data, loading, error, fetchStream } = useFetchStream<
     ActionResponseTypes<S>[T] & Record<string, unknown>
-  >(url, "application/json");
+  >(url, "application/json", apiKey); // Pass apiKey here
 
   const extract = useCallback(
     (text: string) => {

@@ -26,8 +26,9 @@ export function useImageExtract<
   const mergedConfig = useSmutilMergedConfig(config);
   const baseUrl = mergedConfig?.apiUrl || process.env["API_BASE_URL"];
   const url = new URL(`/stream/image-extract`, baseUrl);
-  const { data, loading, error, fetchStream } =
-    createFetchStream<ActionResponseTypes[T]>(url);
+  const { data, loading, error, fetchStream } = createFetchStream<
+    ActionResponseTypes[T]
+  >(url, undefined, mergedConfig?.apiKey);
 
   const extract = async (image: File) => {
     const resizedImage = await readAndCompressImage(image, {

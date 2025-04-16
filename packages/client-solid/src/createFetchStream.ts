@@ -17,7 +17,8 @@ interface FetchStreamResult<T> {
 
 export const createFetchStream = <T extends Record<string, unknown>>(
   url: URL | string,
-  contentType?: string
+  contentType?: string,
+  apiKey?: string
 ): FetchStreamResult<T> => {
   const [data, setData] = createStore<T>({} as T);
   const [loading, setLoading] = createSignal<boolean>(false);
@@ -34,7 +35,10 @@ export const createFetchStream = <T extends Record<string, unknown>>(
 
       const defaultOptions: RequestInit = {
         method: "POST",
-        ...(contentType ? { headers: { "Content-Type": contentType } } : {}),
+        headers: {
+          ...(contentType ? { "Content-Type": contentType } : {}),
+          ...(apiKey ? { "X-API-KEY": apiKey } : {})
+        },
         body,
       };
 

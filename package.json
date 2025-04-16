@@ -6,7 +6,10 @@
     "dev:backend": "bun run --filter='{server,@smutil/core}' dev",
     "release": "semantic-release",
     "build": "bun run --filter='@smutil/*' build:prd",
-    "publish": "bun run --filter='@smutil/*' publish"
+    "publish": "bun run --filter='@smutil/*' publish",
+    "build:clients": "bun run --filter='{@smutil/client-solid,@smutil/client-react}' build:prd",
+    "publish:clients": "bun run --filter='{@smutil/client-solid,@smutil/client-react}' publish",
+    "deploy:clients": "bun run build:clients && bun run publish:clients"
   },
   "workspaces": [
     "packages/*"

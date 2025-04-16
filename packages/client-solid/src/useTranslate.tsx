@@ -20,7 +20,11 @@ export function useTranslate(lang?: string, config?: ClientConfig) {
   const baseUrl = mergedConfig?.apiUrl || process.env["API_BASE_URL"];
   const { data, setData, error, fetchStream } = createFetchStream<
     Record<string, { t: string; l: string }>
-  >(new URL("/stream/translate", baseUrl), "application/json");
+  >(
+    new URL("/stream/translate", baseUrl),
+    "application/json",
+    mergedConfig?.apiKey
+  );
 
   // Reset our translation context whenever the target language changes.
   const setTargetLanguage = (lang: string) => {

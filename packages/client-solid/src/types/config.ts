@@ -13,4 +13,9 @@ export interface ClientConfig {
    * This will be used as a fallback if no language is specified in the useTranslate hook
    */
   language?: string;
+
+  /**
+   * The API key for authentication (currently only used for developer keys)
+   */
+  apiKey?: string;
 }

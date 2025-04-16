@@ -55,7 +55,7 @@ export function useTextExtract<
   const url = new URL(`/stream/text-extract`, baseUrl);
   const { data, loading, error, fetchStream } = createFetchStream<
     ActionResponseTypes<S>[T]
-  >(url, "application/json");
+  >(url, "application/json", mergedConfig?.apiKey);
 
   const extract = (text: string) => {
     const payload = {

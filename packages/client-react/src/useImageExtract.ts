@@ -24,10 +24,11 @@ export function useImageExtract<
   // Merge local config with global config
   const mergedConfig = useSmutilMergedConfig(config);
   const baseUrl = mergedConfig?.apiUrl || process.env.API_BASE_URL;
+  const apiKey = mergedConfig?.apiKey;
   const url = new URL(`/stream/image-extract`, baseUrl);
   const { data, loading, error, fetchStream } = useFetchStream<
     ActionResponseTypes<S>[T] & Record<string, unknown>
-  >(url);
+  >(url, undefined, apiKey); // Pass apiKey here
 
   const extract = useCallback(
     async (image: File) => {

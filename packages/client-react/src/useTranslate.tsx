@@ -30,9 +30,10 @@ export function useTranslate(initialLang?: string, config?: ClientConfig) {
   );
 
   const baseUrl = mergedConfig?.apiUrl || process.env.API_BASE_URL;
+  const apiKey = mergedConfig?.apiKey;
   const { data, loading, error, fetchStream } = useFetchStream<
     Record<string, { t: string }>
-  >(new URL("/stream/translate", baseUrl), "application/json");
+  >(new URL("/stream/translate", baseUrl), "application/json", apiKey); // Pass apiKey here
 
   // Sync loading state
   useEffect(() => {
