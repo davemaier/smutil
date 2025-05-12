@@ -40,6 +40,10 @@ export function useTranslate(initialLang?: string, config?: ClientConfig) {
     loadingRef.current = loading;
   }, [loading]);
 
+  useEffect(() => {
+    console.log("smutil react client loaded");
+  }, [loading]);
+
   // Language change handler
   useEffect(() => {
     contextRef.current = {
