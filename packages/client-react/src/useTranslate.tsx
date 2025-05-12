@@ -42,7 +42,7 @@ export function useTranslate(initialLang?: string, config?: ClientConfig) {
 
   useEffect(() => {
     console.log("smutil react client loaded");
-  }, [loading]);
+  }, []);
 
   // Language change handler
   useEffect(() => {
