@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import useFetchStream from "./useFetchStream";
 import type { ClientConfig } from "./types/config";
-import { useSmutilMergedConfig } from "./SmutilConfigProvider";
+import { useHooxonMergedConfig } from "./HooxonConfigProvider";
 
 interface TranslationContext {
   translations: Map<string, { t: string }>;
@@ -22,7 +22,7 @@ export function useTranslate(initialLang?: string, config?: ClientConfig) {
   // const updateKeyRef = useRef(0);
 
   // Merge local config with global config
-  const mergedConfig = useSmutilMergedConfig(config);
+  const mergedConfig = useHooxonMergedConfig(config);
 
   // Use provided language, or fall back to config language, or default to 'en'
   const [targetLang, setTargetLang] = useState(

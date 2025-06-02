@@ -2,7 +2,7 @@ import { createSignal, onCleanup } from "solid-js";
 import { createFetchStream } from "./createFetchStream.js";
 import { createStore, reconcile, unwrap } from "solid-js/store";
 import type { ClientConfig } from "./types/config.js";
-import { useSmutilMergedConfig } from "./SmutilConfigProvider.js";
+import { useHooxonMergedConfig } from "./HooxonConfigProvider.js";
 
 export function useTranslate(lang?: string, config?: ClientConfig) {
   // Create signals for target language and translation context.
@@ -10,7 +10,7 @@ export function useTranslate(lang?: string, config?: ClientConfig) {
   const [existing, setExisting] = createStore<Record<string, string>>({});
 
   // Merge local config with global config
-  const mergedConfig = useSmutilMergedConfig(config);
+  const mergedConfig = useHooxonMergedConfig(config);
 
   // Use provided language, or fall back to config language, or default to 'en'
   const [targetLang, setTargetLang] = createSignal(

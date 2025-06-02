@@ -4,8 +4,8 @@ export { useImageExtract } from "./useImageExtract";
 export type { ImageExtractionAction } from "./useImageExtract";
 export { useTranslate } from "./useTranslate";
 export {
-  SmutilConfigProvider,
-  useSmutilConfig,
-  useSmutilMergedConfig,
-} from "./SmutilConfigProvider";
+  HooxonConfigProvider,
+  useHooxonConfig,
+  useHooxonMergedConfig,
+} from "./HooxonConfigProvider";
 export type { ClientConfig } from "./types/config";

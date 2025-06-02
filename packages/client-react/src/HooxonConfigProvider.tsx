@@ -3,41 +3,41 @@ import type { ReactNode } from "react";
 import type { ClientConfig } from "./types/config";
 
 // Create the context with undefined as default value
-const SmutilConfigContext = createContext<ClientConfig | undefined>(undefined);
+const HooxonConfigContext = createContext<ClientConfig | undefined>(undefined);
 
-interface SmutilConfigProviderProps {
+interface HooxonConfigProviderProps {
   config: ClientConfig;
   children: ReactNode;
 }
 
 /**
- * Provider component for global smutil configuration
+ * Provider component for global hooxon configuration
  *
  * @example
  * ```tsx
- * <SmutilConfigProvider config={{ apiUrl: "https://api.example.com" }}>
+ * <HooxonConfigProvider config={{ apiUrl: "https://api.example.com" }}>
  *   <App />
- * </SmutilConfigProvider>
+ * </HooxonConfigProvider>
  * ```
  */
-export function SmutilConfigProvider({
+export function HooxonConfigProvider({
   config,
   children,
-}: SmutilConfigProviderProps) {
+}: HooxonConfigProviderProps) {
   return (
-    <SmutilConfigContext.Provider value={config}>
+    <HooxonConfigContext.Provider value={config}>
       {children}
-    </SmutilConfigContext.Provider>
+    </HooxonConfigContext.Provider>
   );
 }
 
 /**
- * Hook to access the global smutil configuration
+ * Hook to access the global hooxon configuration
  *
  * @returns The global configuration object or undefined if not provided
  */
-export function useSmutilConfig(): ClientConfig | undefined {
-  return useContext(SmutilConfigContext);
+export function useHooxonConfig(): ClientConfig | undefined {
+  return useContext(HooxonConfigContext);
 }
 
 /**
@@ -47,10 +47,10 @@ export function useSmutilConfig(): ClientConfig | undefined {
  * @param localConfig - Configuration provided directly to the hook
  * @returns Merged configuration
  */
-export function useSmutilMergedConfig(
+export function useHooxonMergedConfig(
   localConfig?: ClientConfig
 ): ClientConfig {
-  const globalConfig = useSmutilConfig();
+  const globalConfig = useHooxonConfig();
 
   // If local config is provided, it takes precedence
   if (localConfig) {

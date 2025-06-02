@@ -1,7 +1,7 @@
 import { createFetchStream } from "./createFetchStream.js";
 import type { FromSchema, JSONSchema } from "json-schema-to-ts";
 import type { ClientConfig } from "./types/config.js";
-import { useSmutilMergedConfig } from "./SmutilConfigProvider.js";
+import { useHooxonMergedConfig } from "./HooxonConfigProvider.js";
 
 // Define all possible text extraction actions
 export type TextExtractionAction = "personalInfo" | "event" | "textSchema";
@@ -50,7 +50,7 @@ export function useTextExtract<
   S extends JSONSchema | undefined = undefined
 >(action: T, schema?: S, config?: ClientConfig) {
   // Merge local config with global config
-  const mergedConfig = useSmutilMergedConfig(config);
+  const mergedConfig = useHooxonMergedConfig(config);
   const baseUrl = mergedConfig?.apiUrl || process.env["API_BASE_URL"];
   const url = new URL(`/stream/text-extract`, baseUrl);
   const { data, loading, error, fetchStream } = createFetchStream<

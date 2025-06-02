@@ -3,7 +3,7 @@ import type { FromSchema, JSONSchema } from "json-schema-to-ts";
 import useFetchStream from "./useFetchStream";
 import { readAndCompressImage } from "./utils/resizeImage";
 import type { ClientConfig } from "./types/config";
-import { useSmutilMergedConfig } from "./SmutilConfigProvider";
+import { useHooxonMergedConfig } from "./HooxonConfigProvider";
 
 // Define all possible image extraction actions
 export type ImageExtractionAction = "nsfw" | "imageSchema";
@@ -22,7 +22,7 @@ export function useImageExtract<
   S extends JSONSchema | undefined = undefined
 >(action: T, schema?: S, config?: ClientConfig) {
   // Merge local config with global config
-  const mergedConfig = useSmutilMergedConfig(config);
+  const mergedConfig = useHooxonMergedConfig(config);
   const baseUrl = mergedConfig?.apiUrl || process.env.API_BASE_URL;
   const apiKey = mergedConfig?.apiKey;
   const url = new URL(`/stream/image-extract`, baseUrl);

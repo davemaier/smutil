@@ -4,7 +4,7 @@ import {
   getSingleMessageStructuredStream,
   models,
   prompts,
-} from "@smutil/core";
+} from "@hooxon/core";
 import { Elysia, t } from "elysia";
 import { getOrCreateStream } from "./utils/inMemoryCache";
 
