@@ -1,6 +1,6 @@
 {
   "name": "@hooxon/core",
-  "version": "1.0.0-alpha.28",
+  "version": "1.0.0-alpha.29",
   "module": "index.ts",
   "type": "module",
   "main": "./dist/index.js",

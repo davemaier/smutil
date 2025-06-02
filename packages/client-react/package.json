@@ -1,6 +1,6 @@
 {
   "name": "@hooxon/client-react",
-  "version": "1.0.0-alpha.28",
+  "version": "1.0.0-alpha.29",
   "type": "module",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
