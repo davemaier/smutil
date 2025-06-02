@@ -1,7 +1,7 @@
 {
   "name": "@hooxon/client-solid",
   "private": false,
-  "version": "1.0.0-alpha.27",
+  "version": "1.0.0-alpha.28",
   "type": "module",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
