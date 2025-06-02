@@ -1,5 +1,5 @@
 {
-  "name": "@smutil/core",
+  "name": "@hooxon/core",
   "version": "1.0.0-alpha.27",
   "module": "index.ts",
   "type": "module",
