@@ -1,14 +1,14 @@
 {
-  "name": "smutil",
+  "name": "hooxon",
   "private": true,
   "scripts": {
     "dev": "bun run --filter='*' dev",
-    "dev:backend": "bun run --filter='{server,@smutil/core}' dev",
+    "dev:backend": "bun run --filter='{server,@hooxon/core}' dev",
     "release": "semantic-release",
-    "build:prd": "bun run --filter='@smutil/*' build:prd",
-    "publish": "bun run --filter='@smutil/*' publish",
-    "build:clients": "bun run --filter='{@smutil/client-solid,@smutil/client-react}' build:prd",
-    "publish:clients": "bun run --filter='{@smutil/client-solid,@smutil/client-react}' publish",
+    "build:prd": "bun run --filter='@hooxon/*' build:prd",
+    "publish": "bun run --filter='@hooxon/*' publish",
+    "build:clients": "bun run --filter='{@hooxon/client-solid,@hooxon/client-react}' build:prd",
+    "publish:clients": "bun run --filter='{@hooxon/client-solid,@hooxon/client-react}' publish",
     "deploy:clients": "bun run build:clients && bun run publish:clients"
   },
   "workspaces": [
