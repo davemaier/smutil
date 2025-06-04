@@ -1,14 +1,14 @@
 {
-  "name": "hooxon",
+  "name": "ai-hooks",
   "private": true,
   "scripts": {
     "dev": "bun run --filter='*' dev",
-    "dev:backend": "bun run --filter='{server,@hooxon/core}' dev",
+    "dev:backend": "bun run --filter='{server,@ai-hooks/core}' dev",
     "release": "semantic-release",
-    "build:prd": "bun run --filter='@hooxon/*' build:prd",
-    "publish": "bun run --filter='@hooxon/*' publish",
-    "build:clients": "bun run --filter='{@hooxon/client-solid,@hooxon/client-react}' build:prd",
-    "publish:clients": "bun run --filter='{@hooxon/client-solid,@hooxon/client-react}' publish",
+    "build:prd": "bun run --filter='@ai-hooks/*' build:prd",
+    "publish": "bun run --filter='@ai-hooks/*' publish",
+    "build:clients": "bun run --filter='{@ai-hooks/client-solid,@ai-hooks/client-react}' build:prd",
+    "publish:clients": "bun run --filter='{@ai-hooks/client-solid,@ai-hooks/client-react}' publish",
     "deploy:clients": "bun run build:clients && bun run publish:clients"
   },
   "workspaces": [

@@ -1,5 +1,5 @@
 {
-  "name": "@hooxon/client-solid",
+  "name": "@ai-hooks/client-solid",
   "private": false,
   "version": "1.0.0-alpha.31",
   "type": "module",
@@ -23,7 +23,7 @@
   "scripts": {
     "dev": "tsup --watch --env.API_BASE_URL http://localhost:3000",
     "build": "tsup --env.API_BASE_URL http://localhost:3000",
-    "build:prd": "tsup --env.API_BASE_URL https://api.hooxon.dev",
+    "build:prd": "tsup --env.API_BASE_URL https://api.ai-hooks.dev",
     "lint": "eslint .",
     "publish": "bun publish"
   },

@@ -4,8 +4,8 @@ export { useImageExtract } from "./useImageExtract";
 export type { ImageExtractionAction } from "./useImageExtract";
 export { useTranslate } from "./useTranslate";
 export {
-  HooxonConfigProvider,
-  useHooxonConfig,
-  useHooxonMergedConfig,
-} from "./HooxonConfigProvider";
+  AiHooksConfigProvider,
+  useAiHooksConfig,
+  useAiHooksMergedConfig,
+} from "./AiHooksConfigProvider";
 export type { ClientConfig } from "./types/config";

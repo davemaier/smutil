@@ -2,15 +2,14 @@ import { createSignal, onCleanup } from "solid-js";
 import { createFetchStream } from "./createFetchStream.js";
 import { createStore, reconcile, unwrap } from "solid-js/store";
 import type { ClientConfig } from "./types/config.js";
-import { useHooxonMergedConfig } from "./HooxonConfigProvider.js";
+import { useAiHooksMergedConfig } from "./AiHooksConfigProvider.js";
 
 export function useTranslate(lang?: string, config?: ClientConfig) {
   // Create signals for target language and translation context.
   const [pending, setPending] = createStore<Record<string, string>>({});
   const [existing, setExisting] = createStore<Record<string, string>>({});
 
-  // Merge local config with global config
-  const mergedConfig = useHooxonMergedConfig(config);
+  const mergedConfig = useAiHooksMergedConfig(config);
 
   // Use provided language, or fall back to config language, or default to 'en'
   const [targetLang, setTargetLang] = createSignal(

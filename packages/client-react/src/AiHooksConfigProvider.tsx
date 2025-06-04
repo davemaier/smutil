@@ -3,41 +3,41 @@ import type { ReactNode } from "react";
 import type { ClientConfig } from "./types/config";
 
 // Create the context with undefined as default value
-const HooxonConfigContext = createContext<ClientConfig | undefined>(undefined);
+const AiHooksConfigContext = createContext<ClientConfig | undefined>(undefined);
 
-interface HooxonConfigProviderProps {
+interface AiHooksConfigProviderProps {
   config: ClientConfig;
   children: ReactNode;
 }
 
 /**
- * Provider component for global hooxon configuration
+ * Provider component for global ai-hooks configuration
  *
  * @example
  * ```tsx
- * <HooxonConfigProvider config={{ apiUrl: "https://api.example.com" }}>
+ * <AiHooksConfigProvider config={{ apiUrl: "https://api.example.com" }}>
  *   <App />
- * </HooxonConfigProvider>
+ * </AiHooksConfigProvider>
  * ```
  */
-export function HooxonConfigProvider({
+export function AiHooksConfigProvider({
   config,
   children,
-}: HooxonConfigProviderProps) {
+}: AiHooksConfigProviderProps) {
   return (
-    <HooxonConfigContext.Provider value={config}>
+    <AiHooksConfigContext.Provider value={config}>
       {children}
-    </HooxonConfigContext.Provider>
+    </AiHooksConfigContext.Provider>
   );
 }
 
 /**
- * Hook to access the global hooxon configuration
+ * Hook to access the global ai-hooks configuration
  *
  * @returns The global configuration object or undefined if not provided
  */
-export function useHooxonConfig(): ClientConfig | undefined {
-  return useContext(HooxonConfigContext);
+export function useAiHooksConfig(): ClientConfig | undefined {
+  return useContext(AiHooksConfigContext);
 }
 
 /**
@@ -47,10 +47,10 @@ export function useHooxonConfig(): ClientConfig | undefined {
  * @param localConfig - Configuration provided directly to the hook
  * @returns Merged configuration
  */
-export function useHooxonMergedConfig(
+export function useAiHooksMergedConfig(
   localConfig?: ClientConfig
 ): ClientConfig {
-  const globalConfig = useHooxonConfig();
+  const globalConfig = useAiHooksConfig();
 
   // If local config is provided, it takes precedence
   if (localConfig) {

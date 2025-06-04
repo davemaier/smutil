@@ -1,5 +1,5 @@
 {
-  "name": "@hooxon/client-react",
+  "name": "@ai-hooks/client-react",
   "version": "1.0.0-alpha.31",
   "type": "module",
   "main": "dist/cjs/index.js",
@@ -18,7 +18,7 @@
   "scripts": {
     "dev": "bun run build --watch",
     "build": "tsup --env.API_BASE_URL http://localhost:3000",
-    "build:prd": "tsup --env.API_BASE_URL https://api.hooxon.dev",
+    "build:prd": "tsup --env.API_BASE_URL https://api.ai-hooks.dev",
     "lint": "eslint .",
     "publish": "bun publish"
   },

@@ -7,8 +7,8 @@ export type { ImageExtractionAction } from "./useImageExtract.js";
 export { useTranslate } from "./useTranslate.js";
 
 export {
-  HooxonConfigProvider,
-  useHooxonConfig,
-  useHooxonMergedConfig,
-} from "./HooxonConfigProvider.js";
+  AiHooksConfigProvider,
+  useAiHooksConfig,
+  useAiHooksMergedConfig,
+} from "./AiHooksConfigProvider.js";
 export type { ClientConfig } from "./types/config.js";

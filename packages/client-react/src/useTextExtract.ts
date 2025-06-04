@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import type { FromSchema, JSONSchema } from "json-schema-to-ts";
 import useFetchStream from "./useFetchStream";
 import type { ClientConfig } from "./types/config";
-import { useHooxonMergedConfig } from "./HooxonConfigProvider";
+import { useAiHooksMergedConfig } from "./AiHooksConfigProvider";
 
 // Define all possible text extraction actions
 export type TextExtractionAction = "personalInfo" | "event" | "textSchema";
@@ -44,7 +44,7 @@ export function useTextExtract<
   S extends JSONSchema | undefined = undefined
 >(action: T, schema?: S, config?: ClientConfig) {
   // Merge local config with global config
-  const mergedConfig = useHooxonMergedConfig(config);
+  const mergedConfig = useAiHooksMergedConfig(config);
   const baseUrl = mergedConfig?.apiUrl || process.env.API_BASE_URL;
   const apiKey = mergedConfig?.apiKey;
   const url = new URL(`/stream/text-extract`, baseUrl);
