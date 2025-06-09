@@ -26,7 +26,7 @@ export function useImageExtract<
   const mergedConfig = useAiHooksMergedConfig(config);
   const baseUrl = mergedConfig?.apiUrl || process.env["API_BASE_URL"];
   const url = new URL(`/stream/image-extract`, baseUrl);
-  const { data, loading, error, fetchStream } = createFetchStream<
+  const { data, loading, error, requestId, fetchStream } = createFetchStream<
     ActionResponseTypes[T]
   >(url, undefined, mergedConfig?.apiKey);
 
@@ -55,6 +55,7 @@ export function useImageExtract<
     data,
     loading,
     error,
+    requestId,
     extract,
   };
 }

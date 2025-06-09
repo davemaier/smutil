@@ -26,7 +26,7 @@ export function useImageExtract<
   const baseUrl = mergedConfig?.apiUrl || process.env.API_BASE_URL;
   const apiKey = mergedConfig?.apiKey;
   const url = new URL(`/stream/image-extract`, baseUrl);
-  const { data, loading, error, fetchStream } = useFetchStream<
+  const { data, loading, error, requestId, fetchStream } = useFetchStream<
     ActionResponseTypes<S>[T] & Record<string, unknown>
   >(url, undefined, apiKey); // Pass apiKey here
 
@@ -58,6 +58,7 @@ export function useImageExtract<
     data,
     loading,
     error,
+    requestId,
     extract,
   };
 }

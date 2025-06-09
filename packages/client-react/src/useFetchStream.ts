@@ -14,6 +14,7 @@ export function useFetchStream<T extends Record<string, unknown>>(
   const [data, setData] = useState<T>({} as T);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
+  const [requestId, setRequestId] = useState<string | null>(null);
 
   const fetchStream = useCallback(
     async (body: BodyInit): Promise<void> => {
@@ -29,7 +30,7 @@ export function useFetchStream<T extends Record<string, unknown>>(
         if (apiKey) {
           headers["X-API-KEY"] = apiKey;
         }
-  
+
         const response = await fetch(url, {
           method: "POST",
           headers: headers,
@@ -43,6 +44,10 @@ export function useFetchStream<T extends Record<string, unknown>>(
         if (!response.body) {
           throw new Error("ReadableStream not supported in this environment");
         }
+
+        // Capture X-Request-ID header
+        const xRequestId = response.headers.get("X-Request-ID");
+        setRequestId(xRequestId);
 
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
@@ -91,13 +96,14 @@ export function useFetchStream<T extends Record<string, unknown>>(
       }
     },
     [url, contentType, apiKey]
-    );
+  );
 
   return {
     data,
     setData,
     loading,
     error,
+    requestId,
     fetchStream,
   };
 }

@@ -12,6 +12,7 @@ interface FetchStreamResult<T> {
   setData: (data: T) => void;
   loading: Accessor<boolean>;
   error: Accessor<Error | null>;
+  requestId: Accessor<string | null>;
   fetchStream: (body: BodyInit, options?: RequestInit) => Promise<void>;
 }
 
@@ -23,6 +24,7 @@ export const createFetchStream = <T extends Record<string, unknown>>(
   const [data, setData] = createStore<T>({} as T);
   const [loading, setLoading] = createSignal<boolean>(false);
   const [error, setError] = createSignal<Error | null>(null);
+  const [requestId, setRequestId] = createSignal<string | null>(null);
 
   const fetchStream = async (
     body: BodyInit,
@@ -37,7 +39,7 @@ export const createFetchStream = <T extends Record<string, unknown>>(
         method: "POST",
         headers: {
           ...(contentType ? { "Content-Type": contentType } : {}),
-          ...(apiKey ? { "X-API-KEY": apiKey } : {})
+          ...(apiKey ? { "X-API-KEY": apiKey } : {}),
         },
         body,
       };
@@ -54,6 +56,10 @@ export const createFetchStream = <T extends Record<string, unknown>>(
       if (!response.body) {
         throw new Error("ReadableStream not supported in this environment");
       }
+
+      // Capture X-Request-ID header
+      const xRequestId = response.headers.get("X-Request-ID");
+      setRequestId(xRequestId);
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
@@ -104,6 +110,7 @@ export const createFetchStream = <T extends Record<string, unknown>>(
     setData,
     loading,
     error,
+    requestId,
     fetchStream,
   };
 };
