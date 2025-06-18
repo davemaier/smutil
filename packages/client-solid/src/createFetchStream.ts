@@ -64,7 +64,6 @@ export const createFetchStream = <T extends Record<string, unknown>>(
       const decoder = new TextDecoder();
       let result = "";
 
-      // Function to process the stream
       const processStream = async ({
         done,
         value,
@@ -74,7 +73,6 @@ export const createFetchStream = <T extends Record<string, unknown>>(
         }
 
         if (value) {
-          // Decode the chunk of data
           result += decoder.decode(value, { stream: true });
 
           try {
