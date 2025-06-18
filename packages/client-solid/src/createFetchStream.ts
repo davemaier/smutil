@@ -57,8 +57,7 @@ export const createFetchStream = <T extends Record<string, unknown>>(
         throw new Error("ReadableStream not supported in this environment");
       }
 
-      // Capture X-Request-ID header
-      const xRequestId = response.headers.get("X-Request-ID");
+      const xRequestId = response.headers.get("aihooks-request-id");
       setRequestId(xRequestId);
 
       const reader = response.body.getReader();
