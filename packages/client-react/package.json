@@ -1,6 +1,6 @@
 {
   "name": "@ai-hooks/client-react",
-  "version": "1.0.0-alpha.32",
+  "version": "1.0.0-alpha.33",
   "type": "module",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
